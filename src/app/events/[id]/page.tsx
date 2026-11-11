@@ -1,5 +1,6 @@
 "use client";
 
+import { createRegistration, getEventById } from "@/lib/events-api";
 import { use, useEffect, useState } from "react";
 
 type Event = {
@@ -18,24 +19,42 @@ export default function EventPage({
   const [event, setEvent] = useState<Event | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-      async function loadEvent() {
-        try {
-          setLoading(true);
-          setError(null);
-          const res = await fetch(`https://api.example.com/events/${id}`);
-          if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-          setEvent(await res.json());
-        } catch (err) {
-          setError((err as Error).message);
-        } finally {
-          setLoading(false);
-        }
+  const [registrationSuccessMessage, setRegistrationSuccess] = useState("");
+  const [registrationErrorMessage, setRegistrationError] = useState("");
+  useEffect(() => {
+    const loadEvent = async () => {
+      try {
+        const res = await getEventById(id);
+        setEvent(res);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred",
+        );
+      } finally {
+        setLoading(false);
       }
-
-      loadEvent();
-    }, [id]);
+    };
+    loadEvent();
+  }, [id]);
+  const handleRegister = async () => {
+    if (!event) return;
+    const registration = {
+      id_event: event.id,
+      id_user: "user-id-1", // Replace with the actual user ID
+      event_name: event.name,
+      date: new Date().toISOString(),
+    };
+    try {
+      await createRegistration(registration);
+      setRegistrationSuccess("Registration successful!");
+      setRegistrationError("");
+    } catch (err) {
+      setRegistrationError(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+      setRegistrationSuccess("");
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -45,6 +64,18 @@ export default function EventPage({
     <div>
       <h1>{event.name}</h1>
       <p>{event.description}</p>
+      <button onClick = { async () => {
+       await handleRegister();
+      }}>
+        Register
+      </button>
+      {registrationSuccessMessage && (
+        <p style={{ color: "green" }}>{registrationSuccessMessage}</p>
+      )}
+      {registrationErrorMessage && (
+        <p style={{ color: "red" }}>{registrationErrorMessage}</p>
+      )}
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 "use client";
 
+import { getEvents } from "@/lib/events-api";
 import { useEffect, useState } from "react";
 
 type Event = { id: string; name: string };
@@ -9,21 +10,18 @@ export default function EventsPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const loadEvents = async () => {
+    setLoading(true);
+    const loadData = async () => {
       try {
-        setLoading(true);
-        const res = await fetch("https://api.example.com/events").then((res) =>
-          res.json(),
-        );
-        if (!res) setError(res.error || "Failed to fetch events");
+        const res = await getEvents();
         setEvents(res);
-      } catch (err ) {
+      } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred");
       } finally {
         setLoading(false);
       }
     };
-    loadEvents();
+    loadData();
   }, []);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
