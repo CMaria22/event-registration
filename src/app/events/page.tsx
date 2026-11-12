@@ -29,6 +29,7 @@ export default function EventsPage() {
 
   return (
     <>
+      <h1>Events</h1>
       {events.map((event) => (
         <div key={event.id}>
           <h2>{event.name}</h2>

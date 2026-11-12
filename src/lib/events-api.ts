@@ -35,7 +35,7 @@ export async function getEventById(id: string): Promise<Event> {
 
 
 export async function getMyRegistrations(user_id: string): Promise<Registration[]> {
-  const response = await fetch(`https://api.example.com/my-registrations/${user_id}`);
+  const response = await fetch(`https://api.example.com/registrations/${user_id}`);
   const json = await response.json();
   const parsed = RegistrationsResponseSchema.safeParse(json);
   if (!parsed.success) {
