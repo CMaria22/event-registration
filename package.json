@@ -42,5 +42,8 @@
     "workerDirectory": [
       "public"
     ]
-  }
+  },
+  "engines": {
+  "node": ">=22.22.2"
+}
 }
