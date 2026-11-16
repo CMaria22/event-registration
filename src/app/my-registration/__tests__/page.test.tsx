@@ -58,7 +58,7 @@ test("Alice's stale 700ms response does not overwrite Bob's 100ms list", async (
   });
 });
 
-test("bob's response doesnt overwrite alice's response", async ()=>{
+test("testing retry", async ()=>{
    server.use(
      http.get(
        "https://api.example.com/registrations/user-id-1",

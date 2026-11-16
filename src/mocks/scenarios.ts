@@ -71,7 +71,10 @@ export const conflictResponse = http.post(
       error: "Already registered for this event",
       status: 409,
       isSuccess: false,
-    });
+    },
+  {
+    status:409
+  });
   },
 );
 
@@ -94,7 +97,7 @@ export const serverErrorResponse = http.get(
       error: "Internal Server Error",
       status: 500,
       isSuccess: false,
-    });
+    },{status:500});
   },
 );
 //slow response

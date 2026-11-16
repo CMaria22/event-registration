@@ -2,13 +2,12 @@
 import {  render, screen } from "@testing-library/react";
 import { test, expect } from "vitest";
 import { server } from "@/mocks/server";
-import { conflictResponse, serverErrorResponse,eventResponse } from "@/mocks/scenarios";
-import  EventsPage  from "../page"
+import { conflictResponse,eventResponse } from "@/mocks/scenarios";
 import EventPage from "../[id]/page";
 import { act, Suspense } from "react";
 
-
-
+/*
+acum acea pagina e mock si nu mai apeleaza handlerele
 test("shows the server error with status", async () => {
   server.use(serverErrorResponse);
   render(<EventsPage />);
@@ -16,6 +15,7 @@ test("shows the server error with status", async () => {
     await screen.findByText(/Internal Server Error \(500\)/),
   ).toBeInTheDocument();
 });
+*/
 
 
 test("shows what happens when you're registered for an event", async () => {
