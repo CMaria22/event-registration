@@ -1,41 +1,41 @@
-"use client";
+import { EventCatalog } from "@/components/events-page/EventCatalog";
+import { EventFilters } from "@/components/events-page/EventFilters";
+import Hero from "@/components/reusable-ui/Hero";
+import { events } from "@/mocks/fixtures";
+import type { Event } from "@/schemas/event";
 
-import { getEvents } from "@/lib/events-api";
-import { useEffect, useState } from "react";
+export async function getInitialEvents(): Promise<Event[]> {
+  return events;
+}
 
-type Event = { id: string; name: string };
-
-export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    const loadData = async () => {
-      try {
-        const res = await getEvents();
-        setEvents(res);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadData();
-  }, []);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (events.length === 0) return <p>No events found.</p>;
-
+export default async function EventsPage() {
+   const events = await getInitialEvents();
   return (
     <>
-      <h1>Events</h1>
-      {events.map((event) => (
-        <div key={event.id}>
-          <h2>{event.name}</h2>
-          <a href={`/events/${event.id}`}>View Event</a>
+ 
+    <div className="min-h-screen bg-[#f8f7fc]">
+      <div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-8 sm:py-8">
+        <Hero />
+
+        <div className="mt-8">
+          <EventFilters />
         </div>
-      ))}
+
+        <section className="mt-8">
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 className="text-xl font-bold text-slate-900">
+              Upcoming events{" "}
+              <span className="text-sm font-normal text-slate-500">
+                ({events.length})
+              </span>
+            </h2>
+            <span className="text-sm text-slate-500">Sorted by: Soonest ▾</span>
+          </div>
+          <EventCatalog events={events} />
+        </section>
+      </div>
+    </div>
+
     </>
   );
 }

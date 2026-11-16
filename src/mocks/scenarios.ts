@@ -7,7 +7,39 @@ export const unauthorizedResponse = http.get(
     return HttpResponse.json({ error: "Unauthorized", status:401, isSuccess:false }, { status: 401 });
   },
 );
+//401 cu retry
 
+
+let registrationsCalls = 0;
+const FAIL_UNTIL = 2; // primele 2 cereri = 401 (mount dublu din Strict Mode)
+
+export const unauthorizedThenOkResponse = http.get(
+  "https://api.example.com/registrations/:id",
+  () => {
+    registrationsCalls++;
+
+    if (registrationsCalls <= FAIL_UNTIL) {
+      return HttpResponse.json(
+        { error: "Unauthorized", status: 401, isSuccess: false },
+        { status: 401 },
+      );
+    }
+
+    return HttpResponse.json({
+      data: [
+        {
+          id: "reg-1",
+          id_event: "evt-test",
+          id_user: "u1",
+          event_name: "Test",
+          date: "2027-01-04",
+        },
+      ],
+      status: 200,
+      isSuccess: true,
+    });
+  },
+);
 //409
 
 export const eventResponse = http.get(
@@ -90,5 +122,6 @@ export const scenarios = {
   invalidJson: [invalidJsonResponse],
   conflict: [conflictResponse],
   unauthorized: [unauthorizedResponse],
+  unauthorizedThenOk: [unauthorizedThenOkResponse],
   unprocessable: [unprocessableRegistrationResponse],
 };
