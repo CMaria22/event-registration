@@ -1,9 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-test("has h1 Events", async ({ page }) => {
+test("has h2 Events", async ({ page }) => {
   await page.goto("/events");
 
-  await expect(page.locator("h1")).toHaveText("Events");
-  await expect(page.getByText("Product Design Sprint")).toBeVisible();
+  await expect(
+   page.getByRole("heading", { name: "Upcoming events" }),
+ ).toBeVisible();
+
+  await expect(
+   page.getByRole("heading", { name: "Product Design Sprint" }),
+ ).toBeVisible();
 });
 
