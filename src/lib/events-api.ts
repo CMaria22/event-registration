@@ -1,16 +1,32 @@
 import {  EventResponseSchema, EventsResponseSchema, type Event } from "@/schemas/event";
 import { CreateRegistrationResponseSchema, DeleteRegistrationResponseSchema, DeleteResponse, Registration, RegistrationsResponseSchema } from "@/schemas/registration";
 
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message?: string) {
+    super(message ?? `Request failed with status ${status}`);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
 export async function getEvents(): Promise<Event[]> {
   const response = await fetch("https://api.example.com/events");
   const json = await response.json();
   const parsed = EventsResponseSchema.safeParse(json);
   if (!parsed.success) {
-    throw new Error(`Invalid response format (${response.status})`);
+    throw new ApiError(
+      response.status,
+      `Invalid response format (${response.status})`,
+    );
   }
 
   if ( parsed.data.isSuccess === false) {
-    throw new Error(`${parsed.data.error} (${parsed.data.status})`);
+    throw new ApiError(
+      parsed.data.status,
+      `${parsed.data.error} (${parsed.data.status})`,
+    );
   }
 
   return parsed.data.data;
@@ -22,11 +38,15 @@ export async function getEventById(id: string): Promise<Event> {
   const json = await response.json();
   const parsed = EventResponseSchema.safeParse(json);
   if (!parsed.success) {
-    throw new Error(`Invalid response format (${response.status})`);
+    throw new ApiError(
+      response.status,`Invalid response format (${response.status})`,
+    );
   }
 
   if (parsed.data.isSuccess === false) {
-    throw new Error(`${parsed.data.error} (${parsed.data.status})`);
+    throw new ApiError(
+      parsed.data.status,`${parsed.data.error} (${parsed.data.status})`,
+    );
   }
 
   return parsed.data.data;
@@ -39,11 +59,15 @@ export async function getMyRegistrations(user_id: string): Promise<Registration[
   const json = await response.json();
   const parsed = RegistrationsResponseSchema.safeParse(json);
   if (!parsed.success) {
-    throw new Error(`Invalid response format (${response.status})`);
+    throw new ApiError(
+      response.status,`Invalid response format (${response.status})`,
+    );
   }
 
   if (parsed.data.isSuccess === false) {
-    throw new Error(`${parsed.data.error} (${parsed.data.status})`);
+    throw new ApiError(
+      parsed.data.status,`${parsed.data.error} (${parsed.data.status})`,
+    );
   }
 
   return parsed.data.data;
@@ -61,10 +85,14 @@ export async function createRegistration(registration: { id_event: string; id_us
   const json = await response.json();
   const parsed = CreateRegistrationResponseSchema.safeParse(json);
     if (!parsed.success) {
-    throw new Error(`Invalid response format (${response.status})`);
+    throw new ApiError(
+      response.status,`Invalid response format (${response.status})`,
+    );
     }
     if(parsed.data.isSuccess === false) {
-    throw new Error(`${parsed.data.error} (${parsed.data.status})`);
+    throw new ApiError(
+      response.status,`${parsed.data.error} (${parsed.data.status})`,
+    );
     }
 }
 
@@ -75,10 +103,14 @@ export async function deleteRegistration(id:string) : Promise<DeleteResponse> {
     const json = await response.json();
     const parsed = DeleteRegistrationResponseSchema.safeParse(json);
     if( !parsed.success) {
-        throw new Error(`Invalid response format (${response.status})`);
+        throw new ApiError(
+          response.status,`Invalid response format (${response.status})`,
+        );
     }
     if( parsed.data.isSuccess === false) {
-        throw new Error(`${parsed.data.error} (${parsed.data.status})`);
+        throw new ApiError(
+          parsed.data.status,`${parsed.data.error} (${parsed.data.status})`,
+        );
     }
     return parsed.data.data;
 }
