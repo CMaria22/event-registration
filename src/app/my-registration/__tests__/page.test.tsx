@@ -65,7 +65,11 @@ test("testing retry", async ()=>{
        async () => {
          await delay(200);
          return HttpResponse.json(
-           { isSuccess: false, status: 401, error: "Not authentified" },
+           {
+             isSuccess: false,
+             status: 401,
+             error: "Session expired — sign in again",
+           },
            { status: 401 },
          );
        },

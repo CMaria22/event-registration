@@ -33,7 +33,7 @@ useEffect(() => {
     })
     .catch((err) => {
       if (cancelled) return;
-      setStatus({ status: "error", message: err });
+      setStatus({ status: "error", message: err.message });
     });
 
   return () => {
