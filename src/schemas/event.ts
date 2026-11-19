@@ -26,3 +26,9 @@ export const EventResponseSchema = z.union([
   successResponse(EventSchema),
   errorResponseSchema,
 ]);
+
+export type EventFilterValues = {
+  query: string;
+  category: string;
+  date: string;
+};

@@ -82,7 +82,7 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           aria-hidden="true"
         />
 
-        {/* Badge Dată (Dreapta Sus) */}
+  
         <div className="absolute top-3 right-3 bg-white rounded-xl px-2.5 py-1.5 text-center shadow-xs min-w-[44px]">
           <span className="block text-[10px] font-bold uppercase tracking-wider text-[#6338F5] leading-none">
             {month}
@@ -92,19 +92,18 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           </span>
         </div>
 
-        {/* Titlul mare alb din banner */}
+  
         <p className="relative z-10 max-w-[75%] text-white font-black uppercase text-base leading-[1.12] tracking-tight line-clamp-3 drop-shadow-xs">
           {event.name}
         </p>
       </div>
 
-      {/* Conținut Card */}
+
       <div className="flex flex-col flex-1 pt-4 px-1">
         <h3 className="text-[15px] font-bold text-slate-900 group-hover:text-[#6338F5] transition-colors line-clamp-1">
           {event.name}
         </h3>
 
-        {/* Ora (startTime – endTime) și Locația */}
         <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-2">
           <span className="whitespace-nowrap">
             {event.startTime} – {event.endTime}
@@ -113,7 +112,6 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           <span className="truncate">{event.location}</span>
         </div>
 
-        {/* Status locuri + Tip eveniment (Workshop / Conference / Meetup) */}
         <div className="flex items-center justify-between gap-2 mt-3.5">
           <span
             className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${badge.className}`}
@@ -125,7 +123,7 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           </span>
         </div>
 
-        {/* Footer Card: Preț (fee) + Buton View details */}
+
         <div className="flex items-center justify-between pt-4 mt-auto">
           <span className="text-sm font-bold text-slate-900">
             {formatFee(event.fee)}

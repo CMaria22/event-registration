@@ -1,5 +1,16 @@
-import {  EventResponseSchema, EventsResponseSchema, type Event } from "@/schemas/event";
-import { CreateRegistrationResponseSchema, DeleteRegistrationResponseSchema, DeleteResponse, Registration, RegistrationsResponseSchema } from "@/schemas/registration";
+import { EventFilterValues } from "@/schemas/event";
+import {
+  EventResponseSchema,
+  EventsResponseSchema,
+  type Event,
+} from "@/schemas/event";
+import {
+  CreateRegistrationResponseSchema,
+  DeleteRegistrationResponseSchema,
+  DeleteResponse,
+  Registration,
+  RegistrationsResponseSchema,
+} from "@/schemas/registration";
 
 export class ApiError extends Error {
   readonly status: number;
@@ -22,7 +33,7 @@ export async function getEvents(): Promise<Event[]> {
     );
   }
 
-  if ( parsed.data.isSuccess === false) {
+  if (parsed.data.isSuccess === false) {
     throw new ApiError(
       parsed.data.status,
       `${parsed.data.error} (${parsed.data.status})`,
@@ -32,48 +43,58 @@ export async function getEvents(): Promise<Event[]> {
   return parsed.data.data;
 }
 
-
 export async function getEventById(id: string): Promise<Event> {
   const response = await fetch(`https://api.example.com/events/${id}`);
   const json = await response.json();
   const parsed = EventResponseSchema.safeParse(json);
   if (!parsed.success) {
     throw new ApiError(
-      response.status,`Invalid response format (${response.status})`,
+      response.status,
+      `Invalid response format (${response.status})`,
     );
   }
 
   if (parsed.data.isSuccess === false) {
     throw new ApiError(
-      parsed.data.status,`${parsed.data.error} (${parsed.data.status})`,
+      parsed.data.status,
+      `${parsed.data.error} (${parsed.data.status})`,
     );
   }
 
   return parsed.data.data;
 }
 
-
-
-export async function getMyRegistrations(user_id: string): Promise<Registration[]> {
-  const response = await fetch(`https://api.example.com/registrations/${user_id}`);
+export async function getMyRegistrations(
+  user_id: string,
+): Promise<Registration[]> {
+  const response = await fetch(
+    `https://api.example.com/registrations/${user_id}`,
+  );
   const json = await response.json();
   const parsed = RegistrationsResponseSchema.safeParse(json);
   if (!parsed.success) {
     throw new ApiError(
-      response.status,`Invalid response format (${response.status})`,
+      response.status,
+      `Invalid response format (${response.status})`,
     );
   }
 
   if (parsed.data.isSuccess === false) {
     throw new ApiError(
-      parsed.data.status,`${parsed.data.error} (${parsed.data.status})`,
+      parsed.data.status,
+      `${parsed.data.error} (${parsed.data.status})`,
     );
   }
 
   return parsed.data.data;
 }
 
-export async function createRegistration(registration: { id_event: string; id_user: string; event_name: string; date: string }): Promise<void> {
+export async function createRegistration(registration: {
+  id_event: string;
+  id_user: string;
+  event_name: string;
+  date: string;
+}): Promise<void> {
   const response = await fetch("https://api.example.com/registrations", {
     method: "POST",
     headers: {
@@ -81,36 +102,66 @@ export async function createRegistration(registration: { id_event: string; id_us
     },
     body: JSON.stringify(registration),
   });
-  
+
   const json = await response.json();
   const parsed = CreateRegistrationResponseSchema.safeParse(json);
-    if (!parsed.success) {
+  if (!parsed.success) {
     throw new ApiError(
-      response.status,`Invalid response format (${response.status})`,
+      response.status,
+      `Invalid response format (${response.status})`,
     );
-    }
-    if(parsed.data.isSuccess === false) {
+  }
+  if (parsed.data.isSuccess === false) {
     throw new ApiError(
-      response.status,`${parsed.data.error} (${parsed.data.status})`,
+      response.status,
+      `${parsed.data.error} (${parsed.data.status})`,
     );
-    }
+  }
 }
 
-export async function deleteRegistration(id:string) : Promise<DeleteResponse> {
-    const response = await fetch(`https://api.example.com/registrations/${id}`, {
-        method: "DELETE",
-    });
-    const json = await response.json();
-    const parsed = DeleteRegistrationResponseSchema.safeParse(json);
-    if( !parsed.success) {
-        throw new ApiError(
-          response.status,`Invalid response format (${response.status})`,
-        );
-    }
-    if( parsed.data.isSuccess === false) {
-        throw new ApiError(
-          parsed.data.status,`${parsed.data.error} (${parsed.data.status})`,
-        );
-    }
-    return parsed.data.data;
+export async function deleteRegistration(id: string): Promise<DeleteResponse> {
+  const response = await fetch(`https://api.example.com/registrations/${id}`, {
+    method: "DELETE",
+  });
+  const json = await response.json();
+  const parsed = DeleteRegistrationResponseSchema.safeParse(json);
+  if (!parsed.success) {
+    throw new ApiError(
+      response.status,
+      `Invalid response format (${response.status})`,
+    );
+  }
+  if (parsed.data.isSuccess === false) {
+    throw new ApiError(
+      parsed.data.status,
+      `${parsed.data.error} (${parsed.data.status})`,
+    );
+  }
+  return parsed.data.data;
+}
+
+export async function getEventsFiltered(
+  filters: EventFilterValues,
+): Promise<Event[]> {
+  const params = new URLSearchParams(filters);
+  const response = await fetch(
+    `https://api.example.com/events?${params.toString()}`,
+  );
+  const json = await response.json();
+  const parsed = EventsResponseSchema.safeParse(json);
+  if (!parsed.success) {
+    throw new ApiError(
+      response.status,
+      `Invalid response format (${response.status})`,
+    );
+  }
+
+  if (parsed.data.isSuccess === false) {
+    throw new ApiError(
+      parsed.data.status,
+      `${parsed.data.error} (${parsed.data.status})`,
+    );
+  }
+
+  return parsed.data.data;
 }

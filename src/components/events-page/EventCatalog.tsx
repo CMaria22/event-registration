@@ -12,7 +12,7 @@ export function EventCatalog({
     <section className="w-full">
       
 
-      {/* Grid Carduri */}
+
       {events.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {events.map((event, index) => (

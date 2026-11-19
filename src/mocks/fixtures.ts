@@ -8,7 +8,7 @@ export const events: Event[] = [
     name: "Product Design Sprint",
     description: "Build better products through a hands-on design sprint.",
     type: "Workshop",
-    date: "2027-01-04",
+    date: "2026-11-28",
     startTime: "09:00",
     endTime: "12:00",
     location: "Bucharest",

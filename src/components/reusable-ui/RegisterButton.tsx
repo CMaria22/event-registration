@@ -15,8 +15,10 @@ export function RegisterButton({
 }: RegisterButtonProps) {
   const [isLoading, setLoading] = useState(false);
  
- 
   const isRequesting = useRef(false);
+
+  const sleep = (ms: number) =>
+    new Promise<void>((resolve) => setTimeout(resolve, ms));
 
   const createRegistrationFunc = async () => {
     
@@ -34,8 +36,8 @@ export function RegisterButton({
     };
 
     try {
+      await sleep(200);
       await createRegistration(body);
-      alert("Registration successful!");
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Unknown error";
 
@@ -57,3 +59,5 @@ export function RegisterButton({
     </button>
   );
 }
+
+

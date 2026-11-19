@@ -1,44 +1,58 @@
 "use client";
 
-import { useState, FormEvent } from "react";
 import { SearchInput } from "../reusable-ui/SearchInput";
 import { FilterSelect } from "../reusable-ui/FilterSelect";
 import { SearchButton } from "../reusable-ui/SearchButton";
-
-export interface EventFilterValues {
-  query: string;
-  category: string;
-  date: string;
-}
+import {  useState } from "react";
+import { EventFilterValues , Event} from "@/schemas/event";
+import { ApiError, getEventsFiltered } from "@/lib/events-api";
 
 interface EventFiltersProps {
-  initialValues?: Partial<EventFilterValues>;
-  onSearch?: (filters: EventFilterValues) => void;
+  onResults: (events: Event[])=>void;
 }
 
 const CATEGORY_OPTIONS = [
   { label: "All", value: "all" },
-  { label: "Design & UI", value: "design" },
-  { label: "Development", value: "development" },
-  { label: "Product", value: "product" },
-  { label: "Marketing", value: "marketing" },
+  { label: "Workshop", value: "workshop" },
+  { label: "Conference", value: "conference" },
+  { label: "Meetup", value: "meetup" },
 ];
 
 const DATE_OPTIONS = [
   { label: "Anytime", value: "anytime" },
   { label: "Today", value: "today" },
-  { label: "This Week", value: "this-week" },
-  { label: "This Month", value: "this-month" },
+  { label: "This Month", value: "month" },
+  { label: "This Year", value: "year" },
 ];
+type StatType = {
+  status: "idle" | "loading" | "error";
+  message?: string;
+};
 
-export function EventFilters({ initialValues, onSearch }: EventFiltersProps) {
-  const [query, setQuery] = useState(initialValues?.query ?? "");
-  const [category, setCategory] = useState(initialValues?.category ?? "all");
-  const [date, setDate] = useState(initialValues?.date ?? "anytime");
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+export function EventFilters({ onResults }: EventFiltersProps) {
+  const [status, setStatus] = useState<StatType>({status: "idle"});
+  const [filters, setFilters] = useState<EventFilterValues>({
+    query: "",
+    category: "all",
+    date: "anytime",
+  });
+  const update = (key: keyof EventFilterValues) => (value: string) =>
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSearch?.({ query, category, date });
+    setStatus({ status: "loading" });
+
+    try {
+      const results = await getEventsFiltered(filters);
+      onResults(results);
+      setStatus({ status: "idle" });
+    } catch (err) {
+      const message =
+        err instanceof ApiError || err instanceof Error
+          ? err.message
+          : "Unknown error";
+      setStatus({ status: "error", message });
+    }
   };
 
   return (
@@ -48,26 +62,26 @@ export function EventFilters({ initialValues, onSearch }: EventFiltersProps) {
         className="w-full flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
       >
         <SearchInput
-          value={query}
-          onChange={setQuery}
+          value={filters.query}
           placeholder="Search workshops, topics or hosts..."
+          onChange={update("query")}
         />
 
         <FilterSelect
           prefix="Category"
-          value={category}
           options={CATEGORY_OPTIONS}
-          onChange={setCategory}
+          onChange={update("category")}
         />
 
         <FilterSelect
           prefix="Date"
-          value={date}
           options={DATE_OPTIONS}
-          onChange={setDate}
+          onChange={update("date")}
         />
 
-        <SearchButton label="Search" />
+        <SearchButton
+          label={status.status === "loading" ? "Searching..." : "Search"}
+        />
       </form>
     </div>
   );

@@ -96,3 +96,13 @@ test("testing retry", async ()=>{
     expect( await screen.findByText(/No registrations found./)).toBeInTheDocument();
 
 })
+
+test("Alice is selected",
+   async ()=>{
+   const others = registrations.filter((reg) => reg.id_user !== "user-id-1");
+   render(<RegistrationsCatalog user_id="user-id-1" />);
+   others.forEach((reg) => {
+     expect(screen.queryByText(reg.event_name)).not.toBeInTheDocument();
+   });
+   }
+);
