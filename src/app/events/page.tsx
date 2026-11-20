@@ -2,12 +2,7 @@
 import { EventCatalog } from "@/components/events-page/EventCatalog";
 import { EventsExplorer } from "@/components/events-page/EventsExplorer";
 import Hero from "@/components/reusable-ui/Hero";
-import { events } from "@/mocks/fixtures";
-import type { Event } from "@/schemas/event";
-
-export async function getInitialEvents(): Promise<Event[]> {
-  return events;
-}
+import { getInitialEvents } from "@/lib/events-api";
 
 
 export default async function EventsPage() {

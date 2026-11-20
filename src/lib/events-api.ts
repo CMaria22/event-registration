@@ -1,4 +1,7 @@
 import { EventFilterValues } from "@/schemas/event";
+import { events } from "@/mocks/fixtures";
+
+
 import {
   EventResponseSchema,
   EventsResponseSchema,
@@ -164,4 +167,9 @@ export async function getEventsFiltered(
   }
 
   return parsed.data.data;
+}
+
+
+export async function getInitialEvents(): Promise<Event[]> {
+  return events;
 }

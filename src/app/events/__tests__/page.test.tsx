@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { test, expect } from "vitest";
 import { server } from "@/mocks/server";
 import { conflictResponse, eventResponse } from "@/mocks/scenarios";
@@ -6,7 +6,11 @@ import EventPage from "../[id]/page";
 import { act, Suspense } from "react";
 import { delay, http, HttpResponse } from "msw";
 import { RegisterButton } from "@/components/reusable-ui/RegisterButton";
-import { type Event } from "@/schemas/event"
+import { type Event } from "@/schemas/event";
+import { EventsExplorer } from "@/components/events-page/EventsExplorer";
+import { EventCatalog } from "@/components/events-page/EventCatalog";
+import { events } from "@/mocks/fixtures";
+import userEvent from "@testing-library/user-event";
 /*
 acum acea pagina e mock si nu mai apeleaza handlerele
 test("shows the server error with status", async () => {
@@ -70,4 +74,26 @@ test("A request is pending", async () => {
   button.click()
   const button_pending = await screen.findByRole("button", { name: "Registering..." });
   expect(button_pending).toBeDisabled();
+});
+
+test("typing 'prod' in search shows only the matching event", async () => {
+  const user = userEvent.setup();
+  render(
+    <EventsExplorer>
+      <EventCatalog events={events} />
+    </EventsExplorer>,
+  );
+
+
+  expect(screen.getAllByRole("article")).toHaveLength(events.length);
+
+  await user.type(screen.getByPlaceholderText(/search workshops/i), "prod");
+  await user.click(screen.getByRole("button", { name: "Search" }));
+
+
+  await waitFor(() => expect(screen.getAllByRole("article")).toHaveLength(1));
+  expect(
+    screen.getByRole("heading", { name: "Product Design Sprint" }),
+  ).toBeInTheDocument();
+  expect(screen.queryByText("React Patterns Lab")).not.toBeInTheDocument();
 });
