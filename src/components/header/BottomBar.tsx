@@ -1,4 +1,4 @@
-"use client"; // needs usePathname
+"use client"; 
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,7 +21,7 @@ export default function BottomTabBar() {
             href={i.href}
             aria-current={active ? "page" : undefined}
             className={`flex min-h-[56px] flex-1 flex-col items-center justify-center gap-0.5 text-xs font-semibold ${
-              active ? "text-violet-700" : "text-slate-500"
+              active ? "text-[#4c2fce]" : "text-slate-500"
             }`}
           >
             <Icon name={i.icon} />

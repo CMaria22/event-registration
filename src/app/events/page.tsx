@@ -1,4 +1,5 @@
 
+import { EventCatalog } from "@/components/events-page/EventCatalog";
 import { EventsExplorer } from "@/components/events-page/EventsExplorer";
 import Hero from "@/components/reusable-ui/Hero";
 import { events } from "@/mocks/fixtures";
@@ -16,7 +17,9 @@ export default async function EventsPage() {
       <div className="min-h-screen bg-[#f8f7fc]">
         <div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-8 sm:py-8">
           <Hero />
-          <EventsExplorer initialEvents={events} />
+          <EventsExplorer >
+            <EventCatalog events={events} />
+            </EventsExplorer >
         </div>
       </div>
     </>

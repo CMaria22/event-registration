@@ -1,4 +1,4 @@
-"use client"; // needs useState (hamburger) and usePathname (active link)
+"use client"; 
 
 import { useState } from "react";
 import Link from "next/link";
@@ -18,13 +18,12 @@ export default function AppHeader({ userName = "Alice" }: Props) {
           href="/"
           className="flex items-center gap-3 text-xl font-extrabold tracking-tight text-slate-900"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-violet-600 text-white md:h-10 md:w-10">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#4c2fce] text-white md:h-10 md:w-10">
             ✦
           </span>
           Gatherly
         </Link>
 
-        {/* Desktop links: hidden on mobile, flex from md up */}
         <nav
           className="hidden flex-1 justify-center gap-8 md:flex"
           aria-label="Main"
@@ -40,7 +39,7 @@ export default function AppHeader({ userName = "Alice" }: Props) {
                   aria-current={active ? "page" : undefined}
                   className={`border-b-2 py-5 text-sm font-semibold ${
                     active
-                      ? "border-violet-600 text-violet-700"
+                      ? "border-[#4c2fce] text-[#4c2fce]"
                       : "border-transparent text-slate-500 hover:text-slate-800"
                   }`}
                 >
@@ -77,14 +76,13 @@ export default function AppHeader({ userName = "Alice" }: Props) {
         </button>
       </div>
 
-      {/* md:hidden makes the panel vanish on wide screens, so no resize logic is needed */}
       {open && (
         <div
           id="mobile-panel"
           className="border-t border-slate-200 px-4 py-4 text-sm md:hidden"
         >
           <div className="flex items-center gap-3">
-            <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-violet-700">
+            <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-[#4c2fce]">
               DEMO
             </span>
             <span className="text-slate-500">
