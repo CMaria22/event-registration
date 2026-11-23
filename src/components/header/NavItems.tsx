@@ -3,8 +3,8 @@ import type { IconName } from "./Icon";
 export type NavItem = {
   id: string;
   href: string;
-  label: string; // desktop wording
-  shortLabel: string; // mobile tab bar wording
+  label: string; 
+  shortLabel: string; 
   icon: IconName;
   mobileOnly?: boolean;
 };
