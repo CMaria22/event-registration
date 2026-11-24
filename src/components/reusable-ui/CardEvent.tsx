@@ -4,7 +4,7 @@ import { RegisterButton } from "./RegisterButton";
 
 interface EventCardProps {
   event: Event;
-  colorIndex?: number; // opțional, pentru alternarea culorilor banner-ului
+  colorIndex?: number; 
 }
 
 const BANNER_THEMES = [
@@ -30,35 +30,35 @@ function getAvailabilityBadge(event: Event) {
   if (event.availability === "unlimited") {
     return {
       label: "Unlimited",
-      className: "bg-[#EDE9FE] text-[#6338F5]",
+      className: "bg-[#EDE9FE] text-deep-violet",
     };
   }
 
   if (event.availability === "unspecified") {
     return {
       label: "Availability pending",
-      className: "bg-[#EDE9FE] text-[#6338F5]",
+      className: "bg-[#EDE9FE] text-deep-violet",
     };
   }
 
-  // availability === "limited"
+  
   const seats = event.availableSeats ?? 0;
   if (seats <= 0) {
     return {
       label: "Sold out",
-      className: "bg-[#FEE2E2] text-[#D94343]",
+      className: "bg-[#FEE2E2] text-danger",
     };
   }
 
   return {
     label: `${seats} ${seats === 1 ? "seat" : "seats"} left`,
-    className: "bg-[#DCF5E7] text-[#1D7A4C]",
+    className: "bg-[#DCF5E7] text-success",
   };
 }
 
 function formatFee(fee: number) {
   if (fee === 0) return "Free";
-  return `$${fee}`; // poți schimba în `${fee} RON` sau `€${fee}` după preferință
+  return `$${fee}`; 
 }
 
 export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
@@ -84,23 +84,23 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
 
   
         <div className="absolute top-3 right-3 bg-white rounded-xl px-2.5 py-1.5 text-center shadow-xs min-w-[44px]">
-          <span className="block text-[10px] font-bold uppercase tracking-wider text-[#6338F5] leading-none">
+          <span className="block text-[10px] font-bold uppercase tracking-wider text-primary leading-none">
             {month}
           </span>
-          <span className="block text-sm font-extrabold text-slate-800 leading-tight mt-0.5">
+          <span className="block text-sm font-extrabold text-text leading-tight mt-0.5">
             {day}
           </span>
         </div>
 
   
-        <p className="relative z-10 max-w-[75%] text-white font-black uppercase text-base leading-[1.12] tracking-tight line-clamp-3 drop-shadow-xs">
+        <p className="relative z-10 max-w-[75%] text-white  uppercase text-text leading-[1.12] tracking-tight line-clamp-3 drop-shadow-xs">
           {event.name}
         </p>
       </div>
 
 
       <div className="flex flex-col flex-1 pt-4 px-1">
-        <h3 className="text-[15px] font-bold text-slate-900 group-hover:text-[#6338F5] transition-colors line-clamp-1">
+        <h3 className="text-[15px] font-bold text-slate-900 transition-colors line-clamp-1">
           {event.name}
         </h3>
 
@@ -125,7 +125,7 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
 
 
         <div className="flex items-center justify-between pt-4 mt-auto">
-          <span className="text-sm font-bold text-slate-900">
+          <span className="text-sm font-bold text-text">
             {formatFee(event.fee)}
           </span>
 

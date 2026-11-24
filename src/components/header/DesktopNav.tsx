@@ -23,8 +23,8 @@ export default function DesktopNav() {
               aria-current={active ? "page" : undefined}
               className={`border-b-2 py-5 text-sm font-semibold ${
                 active
-                  ? "border-[#4c2fce] text-[#4c2fce]"
-                  : "border-transparent text-slate-500 hover:text-slate-800"
+                  ? "border-deep-violet text-deep-violet"
+                  : "border-transparent text-slate-500 hover:text-deep-violet"
               }`}
             >
               {i.label}

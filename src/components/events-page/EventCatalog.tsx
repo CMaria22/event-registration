@@ -11,7 +11,7 @@ export function EventCatalog({
   return (
     <section className="w-full">
       <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="text-xl font-bold text-slate-900">
+        <h2 className="text-xl font-bold text-text">
           Upcoming events{" "}
           <span className="text-sm font-normal text-slate-500">
             ({events.length})

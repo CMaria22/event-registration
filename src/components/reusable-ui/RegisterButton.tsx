@@ -53,7 +53,7 @@ export function RegisterButton({
       type="button"
       disabled={isLoading}
       onClick={createRegistrationFunc}
-      className="h-8 px-4 bg-[#6338F5] hover:bg-[#5228E0] active:scale-[0.99] disabled:opacity-60 text-white text-sm font-semibold rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
+      className="h-8 px-4 bg-primary hover:bg-deep-violet active:scale-[0.99] disabled:opacity-60 text-white text-sm font-semibold rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
     >
       {isLoading ? "Registering..." : label}
     </button>

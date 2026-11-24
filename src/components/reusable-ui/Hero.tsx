@@ -2,7 +2,7 @@
 export default function Hero(){
 
     return (
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#4c3bb5] via-[#6149d0] to-[#9b7cf0] px-6 py-10 text-white sm:px-10 sm:py-14">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-deep-violet via-primary to-[#9b7cf0] px-6 py-10 text-white sm:px-10 sm:py-14">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-24 top-1/2 hidden h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-white/10 sm:block"

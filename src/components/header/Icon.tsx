@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export type IconName = "search" | "list" | "user";
 
-// Minimal inline icons. Swap for lucide-react if you already use it.
+
 const paths: Record<IconName, ReactNode> = {
   search: (
     <>

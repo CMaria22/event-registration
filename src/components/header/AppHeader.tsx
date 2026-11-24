@@ -18,10 +18,10 @@ export default  async function AppHeader() {
           href="/"
           className="flex items-center gap-3 text-xl font-extrabold tracking-tight text-slate-900"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#4c2fce] text-white md:h-10 md:w-10">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-deep-violet text-white md:h-10 md:w-10">
             ✦
           </span>
-          Gatherly
+          <span className="text-text">Gatherly</span>
         </Link>
 
         <DesktopNav />
@@ -29,27 +29,26 @@ export default  async function AppHeader() {
         <div className="flex-1 md:hidden" />
 
         <div className="hidden items-center gap-3 text-sm md:flex">
-          <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-violet-700">
+          <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-deep-violet">
             DEMO
           </span>
           <span className="text-slate-500">
-            Viewing as <b className="text-slate-900">{userName}</b> ▾
+            Viewing as <b className="text-text">{userName}</b> ▾
           </span>
         </div>
-        {
-        user_id&&
-        <span className="grid h-10 w-10 place-items-center rounded-full bg-violet-100 font-bold text-violet-700">
-          {userName[0]}
-        </span>
-        } 
+        {user_id && (
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-violet-100 font-bold text-deep-violet">
+            {userName[0]}
+          </span>
+        )}
 
         <MobileMenu>
           <div className="flex items-center gap-3">
-            <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-[#4c2fce]">
+            <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-deep-violet">
               DEMO
             </span>
             <span className="text-slate-500">
-              Viewing as <b className="text-slate-900">{userName}</b>
+              Viewing as <span className="font-bold text-text">{userName}</span>
             </span>
           </div>
         </MobileMenu>
