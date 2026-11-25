@@ -14,6 +14,19 @@ test("has h2 Events", async ({ page }) => {
 });
 
 test("alice page contains alice's events", async ({ page }) => {
+   await page.route(
+     "https://api.example.com/registrations/user-id-1",
+     (route) =>
+       route.fulfill({
+         status: 200,
+         contentType: "application/json",
+         body: JSON.stringify({
+           data: registrations.filter((r) => r.id_user === "user-id-1"),
+           status: 200,
+           isSuccess: true,
+         }),
+       }),
+   );
   await page.goto("/my-registration");
   await page.click('button:has-text("Alice")');
   const alicereg = registrations.filter((r) => r.id_user === "user-id-1");
@@ -57,8 +70,10 @@ test("A request is pending", async ({ page }) => {
 test("events are rendered on the server", async ({ request }) => {
   const res = await request.get("/events");
   expect(res.status()).toBe(200);
-  const html = await res.text();
-  expect(html).toContain("Upcoming events");
-  expect(html).toContain("Product Design Sprint");
-});
 
+  const html = await res.text();
+  const markup = html.replace(/<script[\s\S]*?<\/script>/g, "");
+
+  expect(markup).toMatch(/<h2[^>]*>\s*Upcoming events/);
+  expect(markup).toMatch(/<h3[^>]*>\s*Product Design Sprint/);
+});
