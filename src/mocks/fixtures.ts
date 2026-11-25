@@ -1,5 +1,4 @@
 import { Event } from "@/schemas/event";
-export type EventAvailability = "limited" | "unlimited" | "unspecified";
 
 
 export const events: Event[] = [
@@ -10,10 +9,8 @@ export const events: Event[] = [
     type: "Workshop",
     date: "2026-11-28",
     startTime: "09:00",
-    endTime: "12:00",
     location: "Bucharest",
-    availability: "limited",
-    availableSeats: 5,
+    availability: {kind:"limited",remaining:5},
     fee: 0,
   },
   {
@@ -23,9 +20,8 @@ export const events: Event[] = [
     type: "Workshop",
     date: "2027-01-12",
     startTime: "09:00",
-    endTime: "12:00",
     location: "Online",
-    availability: "unlimited",
+    availability: {kind:"unlimited"},
     fee: 0,
   },
   {
@@ -35,10 +31,8 @@ export const events: Event[] = [
     type: "Workshop",
     date: "2027-01-18",
     startTime: "09:00",
-    endTime: "12:00",
     location: "Cluj-Napoca",
-    availability: "limited",
-    availableSeats: 0,
+    availability: {kind:"limited",remaining:0},
     fee: 0,
   },
   {
@@ -48,9 +42,8 @@ export const events: Event[] = [
     type: "Workshop",
     date: "2027-01-26",
     startTime: "09:00",
-    endTime: "12:00",
     location: "Online",
-    availability: "unspecified", //
+    availability: {kind:"unknown"},
     fee: 0,
   },
 ];

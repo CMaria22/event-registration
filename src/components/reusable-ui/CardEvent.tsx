@@ -4,7 +4,7 @@ import { RegisterButton } from "./RegisterButton";
 
 interface EventCardProps {
   event: Event;
-  colorIndex?: number; 
+  colorIndex?: number;
 }
 
 const BANNER_THEMES = [
@@ -27,38 +27,38 @@ function formatEventDate(dateStr: string) {
 }
 
 function getAvailabilityBadge(event: Event) {
-  if (event.availability === "unlimited") {
-    return {
-      label: "Unlimited",
-      className: "bg-[#EDE9FE] text-deep-violet",
-    };
+  switch (event.availability.kind) {
+    case "unlimited":
+      return {
+        label: "Unlimited seats",
+        className: "bg-[#EDE9FE] text-deep-violet",
+      };
+    case "unknown":
+      return {
+        label: "Availability unavailable",
+        className: "bg-[#EDE9FE] text-deep-violet",
+      };
+    case "limited":
+      if (event.availability.remaining === 0) {
+        return {
+          label: "Sold out",
+          className: "bg-[#FEE2E2] text-danger",
+        };
+      } else {
+        return {
+          label: `${event.availability.remaining} ${event.availability.remaining === 1 ? "spot" : "spots"} left`,
+          className: "bg-[#DCF5E7] text-success",
+        };
+      }
+    default:
+      const _exhaustiveCheck: never = event.availability;
+      throw new Error(`Unhandled availability: ${JSON.stringify(_exhaustiveCheck)}`);
   }
-
-  if (event.availability === "unspecified") {
-    return {
-      label: "Availability pending",
-      className: "bg-[#EDE9FE] text-deep-violet",
-    };
-  }
-
-  
-  const seats = event.availableSeats ?? 0;
-  if (seats <= 0) {
-    return {
-      label: "Sold out",
-      className: "bg-[#FEE2E2] text-danger",
-    };
-  }
-
-  return {
-    label: `${seats} ${seats === 1 ? "seat" : "seats"} left`,
-    className: "bg-[#DCF5E7] text-success",
-  };
 }
 
 function formatFee(fee: number) {
   if (fee === 0) return "Free";
-  return `$${fee}`; 
+  return `$${fee}`;
 }
 
 export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
@@ -68,11 +68,9 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
 
   return (
     <article className="group flex flex-col bg-white border border-slate-200/80 rounded-2xl p-3.5 shadow-xs hover:shadow-md hover:border-slate-300/90 transition-all">
-
       <div
         className={`relative h-40 w-full rounded-xl p-4 flex flex-col justify-end overflow-hidden ${themeClass}`}
       >
-     
         <div
           className="absolute -right-6 -top-6 h-36 w-36 rounded-full bg-white/10 pointer-events-none"
           aria-hidden="true"
@@ -82,7 +80,6 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           aria-hidden="true"
         />
 
-  
         <div className="absolute top-3 right-3 bg-white rounded-xl px-2.5 py-1.5 text-center shadow-xs min-w-[44px]">
           <span className="block text-[10px] font-bold uppercase tracking-wider text-primary leading-none">
             {month}
@@ -92,12 +89,10 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           </span>
         </div>
 
-  
-        <p className="relative z-10 max-w-[75%] text-white  uppercase text-text leading-[1.12] tracking-tight line-clamp-3 drop-shadow-xs">
+        <p className="relative z-10 max-w-[75%] text-white  uppercase leading-[1.12] tracking-tight line-clamp-3 drop-shadow-xs">
           {event.name}
         </p>
       </div>
-
 
       <div className="flex flex-col flex-1 pt-4 px-1">
         <h3 className="text-[15px] font-bold text-slate-900 transition-colors line-clamp-1">
@@ -105,9 +100,7 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
         </h3>
 
         <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-2">
-          <span className="whitespace-nowrap">
-            {event.startTime} – {event.endTime}
-          </span>
+          <span className="whitespace-nowrap">{event.startTime}</span>
           <span>·</span>
           <span className="truncate">{event.location}</span>
         </div>
@@ -123,20 +116,18 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
           </span>
         </div>
 
-
         <div className="flex items-center justify-between pt-4 mt-auto">
           <span className="text-sm font-bold text-text">
             {formatFee(event.fee)}
           </span>
 
-          <RegisterButton event={event}/>
+          <RegisterButton event={event} />
 
           <Link
             href={`/events/${event.id}`}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#EFEAFE] hover:bg-[#E3DAFD] text-[#6338F5] text-xs font-semibold transition-colors"
           >
             <span>View details</span>
-            
           </Link>
         </div>
       </div>

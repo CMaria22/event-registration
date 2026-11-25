@@ -1,6 +1,16 @@
 import { z } from "zod";
 import { errorResponseSchema, successResponse } from "./api";
 
+
+export const AvailabilitySchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("limited"),
+    remaining: z.number().int().nonnegative(),
+  }),
+  z.object({ kind: z.literal("unlimited") }),
+  z.object({ kind: z.literal("unknown") }),
+]);
+
 export const EventSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -8,13 +18,12 @@ export const EventSchema = z.object({
   type: z.enum(["Workshop", "Conference", "Meetup"]),
   date: z.string(),
   startTime: z.string(),
-  endTime: z.string(),
   location: z.string(),
-  availability: z.enum(["limited", "unlimited", "unspecified"]),
-  availableSeats: z.number().optional(),
+  availability: AvailabilitySchema,
   fee: z.number(),
 });
 
+export type Availability = z.infer<typeof AvailabilitySchema>;
 export type Event = z.infer<typeof EventSchema>;
 
 export const EventsResponseSchema = z.union([
