@@ -98,16 +98,3 @@ useEffect(() => {
     </>
   );
 }
-test.describe("SSR", () => {
-  test.use({ javaScriptEnabled: false });
-
-  test("events are rendered on the server", async ({ page }) => {
-    await page.goto("/events");
-    await expect(
-      page.getByRole("heading", { name: "Upcoming events" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Product Design Sprint" }),
-    ).toBeVisible();
-  });
-});

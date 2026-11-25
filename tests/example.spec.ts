@@ -53,3 +53,12 @@ test("A request is pending", async ({ page }) => {
   expect(await button.first().textContent()).toBe("Registering...");
   expect(await button.first().isDisabled()).toBeTruthy();
 });
+
+test("events are rendered on the server", async ({ request }) => {
+  const res = await request.get("/events");
+  expect(res.status()).toBe(200);
+  const html = await res.text();
+  expect(html).toContain("Upcoming events");
+  expect(html).toContain("Product Design Sprint");
+});
+
