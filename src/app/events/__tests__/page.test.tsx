@@ -63,10 +63,8 @@ test("A request is pending", async () => {
     type: "Workshop",
     date: "2027-01-04",
     startTime: "09:00",
-    endTime: "12:00",
     location: "Bucharest",
-    availability: "limited",
-    availableSeats: 5,
+    availability:{kind:"limited",remaining:5},
     fee: 0,
   };
   render(<RegisterButton event={event_test}/>);
