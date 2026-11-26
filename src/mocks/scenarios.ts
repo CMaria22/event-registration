@@ -1,4 +1,26 @@
 import { http, HttpResponse } from "msw/http";
+//malformed event
+export const malformedResponse = http.get("https://api.example.com/events", () =>
+  HttpResponse.json({
+    data: [
+      {
+        id: "evt-test",
+        name: "Test",
+        description: "Testing event",
+        type: "Workshop",
+        date: "2027-01-04",
+        startTime: "09:00",
+        location: "Bucharest",
+        availability: { kind: "limited", remaining: 5 },
+        fee: 0,
+      },
+    ],
+    status: 200,
+    isSuccess: true,
+  }),
+);
+
+
 
 //401
 export const unauthorizedResponse = http.get(
@@ -119,6 +141,7 @@ export const invalidJsonResponse = http.get(
 );
 export const scenarios = {
   default: [],
+  malformedEvents:[malformedResponse],
   serverError: [serverErrorResponse],
   slow: [slowResponse],
   invalidJson: [invalidJsonResponse],

@@ -16,7 +16,7 @@ export const EventSchema = z.object({
   name: z.string(),
   description: z.string(),
   type: z.enum(["Workshop", "Conference", "Meetup"]),
-  date: z.string(),
+  date: z.iso.date(),
   startTime: z.string(),
   location: z.string(),
   availability: AvailabilitySchema,

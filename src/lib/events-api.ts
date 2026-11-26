@@ -165,7 +165,7 @@ export async function getEventsFiltered(
       `${parsed.data.error} (${parsed.data.status})`,
     );
   }
-
+console.log( parsed.data.data[0].date)
   return parsed.data.data;
 }
 
