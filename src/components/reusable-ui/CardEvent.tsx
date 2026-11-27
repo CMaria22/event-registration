@@ -15,15 +15,18 @@ const BANNER_THEMES = [
 ];
 
 function formatEventDate(dateStr: string) {
-  const parsed = new Date(dateStr);
-  if (Number.isNaN(parsed.getTime())) {
-    return { month: "TBA", day: "--" };
-  }
-  const month = new Intl.DateTimeFormat("en-US", { month: "short" })
-    .format(parsed)
-    .toUpperCase();
-  const day = String(parsed.getDate()).padStart(2, "0");
-  return { month, day };
+  const [year, month, day] = dateStr.split("-");
+  const date = new Date(Date.UTC(parseInt(year),parseInt(month)-1,parseInt(day),0,0,0,0));
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  };
+
+  const dataFormatted =new Intl.DateTimeFormat("en-US", options).formatToParts(date);
+  const monthFormatted = dataFormatted.find((p) => p.type === "month")?.value; 
+  const dayFormatted = dataFormatted.find((p) => p.type === "day")?.value; 
+  return { monthFormatted,dayFormatted };
 }
 
 function getAvailabilityBadge(event: Event) {
@@ -62,7 +65,7 @@ function formatFee(fee: number) {
 }
 
 export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
-  const { month, day } = formatEventDate(event.date);
+  const { monthFormatted, dayFormatted } = formatEventDate(event.date);
   const badge = getAvailabilityBadge(event);
   const themeClass = BANNER_THEMES[colorIndex % BANNER_THEMES.length];
 
@@ -82,10 +85,10 @@ export function EventCard({ event, colorIndex = 0 }: EventCardProps) {
 
         <div className="absolute top-3 right-3 bg-white rounded-xl px-2.5 py-1.5 text-center shadow-xs min-w-[44px]">
           <span className="block text-[10px] font-bold uppercase tracking-wider text-primary leading-none">
-            {month}
+            {monthFormatted}
           </span>
           <span className="block text-sm font-extrabold text-text leading-tight mt-0.5">
-            {day}
+            {dayFormatted}
           </span>
         </div>
 

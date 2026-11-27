@@ -95,3 +95,5 @@ test("typing 'prod' in search shows only the matching event", async () => {
   ).toBeInTheDocument();
   expect(screen.queryByText("React Patterns Lab")).not.toBeInTheDocument();
 });
+
+

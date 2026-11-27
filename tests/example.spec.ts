@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { registrations } from "@/mocks/fixtures";
 
+
 test("has h2 Events", async ({ page }) => {
   await page.goto("/events");
 
@@ -76,4 +77,84 @@ test("events are rendered on the server", async ({ request }) => {
 
   expect(markup).toMatch(/<h2[^>]*>\s*Upcoming events/);
   expect(markup).toMatch(/<h3[^>]*>\s*Product Design Sprint/);
+});
+
+test("eventDate: '2027-01-04' in New York", async ({ browser }) => {
+  const context = await browser.newContext({
+    timezoneId: "America/New_York",
+  });
+  const page = await context.newPage();
+  await page.route(
+    "https://api.example.com/events?query=&category=all&date=anytime",
+    (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: [
+            {
+              id: "evt-test",
+              name: "Test",
+              description: "Testing event",
+              type: "Workshop",
+              date: "2027-01-04",
+              startTime: "09:00",
+              location: "Bucharest",
+              availability: {
+                kind: "limited",
+                remaining: 5,
+              },
+              fee: 0,
+            },
+          ],
+          status: 200,
+          isSuccess: true,
+        }),
+      }),
+  );
+  await page.goto("/events");
+  const button = page.locator("button", { hasText: "Search" });
+  await button.click();
+  const card = page.locator("article").first();
+  await expect(card.getByText("JAN", { exact: false })).toBeVisible();
+  await expect(card.getByText("4", { exact: true })).toBeVisible();
+});
+
+test("eventDate: '2027-01-04' in Bucharest", async ({ browser }) => {
+  const context = await browser.newContext({ timezoneId: "Europe/Bucharest" });
+  const page = await context.newPage();
+  await page.route(
+    "https://api.example.com/events?query=&category=all&date=anytime",
+    (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: [
+            {
+              id: "evt-test",
+              name: "Test",
+              description: "Testing event",
+              type: "Workshop",
+              date: "2027-01-04",
+              startTime: "09:00",
+              location: "Bucharest",
+              availability: {
+                kind: "limited",
+                remaining: 5,
+              },
+              fee: 0,
+            },
+          ],
+          status: 200,
+          isSuccess: true,
+        }),
+      }),
+  );
+  await page.goto("/events");
+  const button = page.locator("button", { hasText: "Search" });
+  await button.click();
+  const card = page.locator("article").first();
+  await expect(card.getByText("JAN", { exact: false })).toBeVisible();
+  await expect(card.getByText("4", { exact: true })).toBeVisible();
 });
